@@ -1,12 +1,16 @@
 import styles from "./style";
 import LoginSchema from "./LoginSchema";
 
+import {auth} from '../../../firebase'
+
+import {signInWithEmailAndPassword} from 'firebase/auth'
 import { useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Input, Button, Text, Divider } from "react-native-elements";
 import { useFormik } from "formik";
 import Toast from "react-native-toast-message";
+
 
 
 const Logo = require('../../../assets/img/Logo.png')
@@ -25,27 +29,16 @@ function FormLogin() {
             password: ''
         },
         validationSchema: LoginSchema,
-        onSubmit: (values, {setSubmitting}) => {
+        onSubmit: async (values, {setSubmitting}) => {
             try {
-                if (formik.values.email === 'edgar@hotmail.com' || formik.values.password === '12345') {
-                    setSubmitting(false)
-                    Toast.show({
-                        type: "success",
-                        visibilityTime: 3000,
-                        text1: 'Inicio de sesion exitoso!',
-                        position: "top"
-                    })
-                    console.log('Datos ingresado correctament')
-                } else {
-                    setSubmitting(false)
-                    Toast.show({
-                        type: 'error',
-                        visibilityTime: 3000,
-                        text1: 'Error de inicio de sesion',
-                        position: "top"
-                    })
-                    console.log('Error')
-                }
+                await signInWithEmailAndPassword(auth, values.email, values.password)                
+                Toast.show({
+                    type: "success",
+                    visibilityTime: 3000,
+                    text1: 'Inicio de sesion exitoso!',
+                    position: "top"
+                })
+                console.log('Datos ingresado correctament')
             } catch (e) {
                 Toast.show({
                     type: 'error',
@@ -53,6 +46,8 @@ function FormLogin() {
                     text1: 'Error de inicio de sesion',
                     position: "top"
                 })
+            } finally {
+                setSubmitting(false)
             }
         }
     })
@@ -85,7 +80,6 @@ function FormLogin() {
                 <Button  title='Log in'
                          containerStyle={styles.btn}
                          onPress={formik.handleSubmit}
-                         disabled={!formik.isValid}
                          loading={formik.isSubmitting}/>
                 <View style={styles.dividers}>
                     <Divider style={styles.divider1} width={2} />

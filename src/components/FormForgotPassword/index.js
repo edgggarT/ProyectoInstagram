@@ -1,13 +1,16 @@
 import { ForgotPassSchema } from "./ForgotPassSchema";
 
+import {sendPasswordResetEmail} from 'firebase/auth'
+import {auth} from '../../../firebase'
+
 import styles from "./style"
 const Padlock = require('../../../assets/img/padlock.png')
 
 import React from "react";
 import { View, Text, Image, InputAccessoryView } from "react-native";
 import { Input, Button } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
 import { useFormik } from "formik";
+import Toast from "react-native-toast-message";
 
 
 function FormForgotPassword() {
@@ -15,8 +18,20 @@ function FormForgotPassword() {
     const formik = useFormik({
         initialValues: {email: ''},
         validationSchema: ForgotPassSchema,
-        onSubmit: (values, {setSubmitting}) => {
-
+        onSubmit: async (values, {setSubmitting}) => {
+            try {
+                await sendPasswordResetEmail(auth, values.email)
+                Toast.show({
+                    type: 'success',
+                    text1: '¡Enlace Enviado!',
+                    text2: 'Revisa tu bandeja de entrada (incluyendo spam).',
+                    visibilityTime: 6000,
+                });
+            } catch (e) {
+                console.error("Error en firebase", e.code)
+            } finally {
+                setSubmitting(false)
+            }
         }
     })
 
@@ -36,7 +51,6 @@ function FormForgotPassword() {
                        style={styles.input}/>
                 <Button title='Send Login Link'
                         onPress={formik.handleSubmit}
-                        disabled={!formik.isValid}
                         loading={formik.isSubmitting}/>
             </View>
         </View>
