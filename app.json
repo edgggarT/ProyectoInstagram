@@ -22,8 +22,14 @@
       },
       "edgeToEdgeEnabled": true
     },
+    "facebookAppId": "689844140587894",
+    "facebookDisplayName": "InsteApp",
+    "facebookScheme": "fb689844140587894", 
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-facebook"
+    ]
   }
 }

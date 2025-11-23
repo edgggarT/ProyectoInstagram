@@ -2,8 +2,9 @@ import styles from "./style";
 import LoginSchema from "./LoginSchema";
 
 import {auth} from '../../../firebase'
+import * as Facebook from 'expo-facebook'
 
-import {signInWithEmailAndPassword} from 'firebase/auth'
+import {signInWithEmailAndPassword, FacebookAuthProvider, signInWithCredential} from 'firebase/auth'
 import { useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +16,8 @@ import Toast from "react-native-toast-message";
 
 const Logo = require('../../../assets/img/Logo.png')
 
+const FACE_APP_ID = "689844140587894"
+
 function FormLogin() {
     
     const [showPassword, setShowPassword] = useState(false)
@@ -22,6 +25,54 @@ function FormLogin() {
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
+
+    const handleFacebookLogin = async () => {
+        try {
+            
+            await Facebook.initializeAsync({
+                appId: FACE_APP_ID,
+            })
+            
+            const {type, token} = await Facebook.logInWithReadPermissionsAsync({
+                permissions: ['public_profile', 'email'],
+            })
+
+            
+            if (type === 'success') {
+                const FaceToken = token
+    
+                const FaceCredential = FacebookAuthProvider.credential(FaceToken)
+                const userCredential = await signInWithCredential(auth, FaceCredential)
+                const user = userCredential.user
+                Toast.show({
+                        type: "info",
+                        visibilityTime: 3000,
+                        text1: `Ingreso como ${user.displayName}!`,
+                        position: "top"
+                    })
+
+            } else if (type === 'cancel') {
+                Toast.show({
+                        type: "error",
+                        visibilityTime: 3000,
+                        text1: "Login cancelado!",
+                        position: "top"
+                    })
+            }
+
+
+        } catch (e) {
+            console.log('Error: ', e)
+            Toast.show({
+                    type: "error",
+                    visibilityTime: 3000,
+                    text1: 'No fue posible ingresa con Facebook!',
+                    position: "top"
+                })
+        }
+    }
+
+
 
     const formik = useFormik({
         initialValues: {
@@ -86,18 +137,24 @@ function FormLogin() {
                     <Text style={styles.dividerText}>OR</Text>
                     <Divider style={styles.divider1} width={2} />
                 </View>
-                <View style={styles.loginfacecontainer}>
-                    <Ionicons name="logo-facebook" size={20} color='#0f5defff'/>
-                    <Text style={styles.loginFace}>Log in with Facebook</Text>
-                </View>
+                <TouchableOpacity activeOpacity={0.8} onPress={handleFacebookLogin}>
+                    <View style={styles.loginfacecontainer}>
+                        <Ionicons name="logo-facebook" size={20} color='#0f5defff'/>
+                        <Text style={styles.loginFace}>Log in with Facebook</Text>
+                    </View>
+                </TouchableOpacity>
                 <View style={styles.dividerSingUp}>
                     <Divider width={2}/>
                 </View>
                 <View style={styles.singUpContainer}>
                     <Text style={styles.dontAcc}>
-                        Dont have an account? <Text style={styles.signUpLink}>Sign Up</Text>
-                    
+                        Dont have an account? 
                     </Text>
+                    <TouchableOpacity style={styles.buttonSingUp} activeOpacity={0.8}>
+                        <Text style={styles.signUpLink}>
+                            Sign Up
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

@@ -82,7 +82,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     signUpLink: {
-        color: '#0fa0efff'
+        color: '#0fa0efff',
+        fontSize: 15,
+    },
+    buttonSingUp: {
+        padding: 0,
+        alignSelf: 'center'
     }
 })
 

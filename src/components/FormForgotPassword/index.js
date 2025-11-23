@@ -7,7 +7,7 @@ import styles from "./style"
 const Padlock = require('../../../assets/img/padlock.png')
 
 import React from "react";
-import { View, Text, Image, InputAccessoryView } from "react-native";
+import { View, Text, Image, Alert } from "react-native";
 import { Input, Button } from "react-native-elements";
 import { useFormik } from "formik";
 import Toast from "react-native-toast-message";
@@ -29,6 +29,7 @@ function FormForgotPassword() {
                 });
             } catch (e) {
                 console.error("Error en firebase", e.code)
+                Alert.alert(title='Problema de servicio', 'El servicio asociado esta teniendo problemas')
             } finally {
                 setSubmitting(false)
             }
