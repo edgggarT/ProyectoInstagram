@@ -2,10 +2,12 @@ import styles from "./style";
 import LoginSchema from "./LoginSchema";
 
 import {auth} from '../../../firebase'
-import * as Facebook from 'expo-facebook'
+import * as wb from 'expo-web-browser'
+import * as Facebook from 'expo-auth-session/providers/facebook'
+import { ResponseType } from "expo-auth-session";
 
 import {signInWithEmailAndPassword, FacebookAuthProvider, signInWithCredential} from 'firebase/auth'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Input, Button, Text, Divider } from "react-native-elements";
@@ -16,63 +18,75 @@ import Toast from "react-native-toast-message";
 
 const Logo = require('../../../assets/img/Logo.png')
 
+wb.maybeCompleteAuthSession()
+
 const FACE_APP_ID = "689844140587894"
 
 function FormLogin() {
     
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(true)
+
+    const [request, response, promptAsync] = Facebook.useAuthRequest({
+        responseType: ResponseType.Token,
+        clientId: FACE_APP_ID,
+        scopes: ['public_profile', 'email']
+    })
 
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
 
-    const handleFacebookLogin = async () => {
+    const handleFacebookLogin = async (token) => {
         try {
-            
-            await Facebook.initializeAsync({
-                appId: FACE_APP_ID,
-            })
-            
-            const {type, token} = await Facebook.logInWithReadPermissionsAsync({
-                permissions: ['public_profile', 'email'],
-            })
-
-            
-            if (type === 'success') {
-                const FaceToken = token
-    
-                const FaceCredential = FacebookAuthProvider.credential(FaceToken)
-                const userCredential = await signInWithCredential(auth, FaceCredential)
-                const user = userCredential.user
-                Toast.show({
-                        type: "info",
-                        visibilityTime: 3000,
-                        text1: `Ingreso como ${user.displayName}!`,
-                        position: "top"
-                    })
-
-            } else if (type === 'cancel') {
-                Toast.show({
-                        type: "error",
-                        visibilityTime: 3000,
-                        text1: "Login cancelado!",
-                        position: "top"
-                    })
-            }
-
-
-        } catch (e) {
-            console.log('Error: ', e)
+            const FaceCredential = FacebookAuthProvider.credential(token)
+            const userCredential = await signInWithCredential(auth, FaceCredential)
+            const user = userCredential.user
             Toast.show({
-                    type: "error",
+                    type: "info",
                     visibilityTime: 3000,
-                    text1: 'No fue posible ingresa con Facebook!',
+                    text1: `Ingreso como ${user.displayName}!`,
                     position: "top"
                 })
+            console.log('Inicio de sesion exitoso con facebook: ', user.displayName)
+        } catch (e) {
+            if (e.code === "auth/account-exists-with-different-credential") {
+                Toast.show({
+                    type: "error",
+                    visibilityTime: 3000,
+                    text1: `Cuenta ya registrada con este email!`,
+                    position: "top"
+                })
+            } else {
+                Toast.show({
+                    type: "error",
+                    visibilityTime: 3000,
+                    text1: `Error de inicio de sesion con Facebook!`,
+                    position: "top"
+                })
+            }
+            console.log('Error: ', e)
         }
     }
 
 
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const {access_token} = response.params;
+            handleFacebookLogin(access_token)
+        } else if (response?.type === 'cancel') {
+            Toast.show({
+                type: 'error',
+                visibilityTime: 3000,
+                text1: 'Login Cancelado',
+                position: 'top'
+            })
+        }
+    }, [response])
+
+
+    const SingInWithFacebook = async () => {
+        await promptAsync()
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -89,7 +103,7 @@ function FormLogin() {
                     text1: 'Inicio de sesion exitoso!',
                     position: "top"
                 })
-                console.log('Datos ingresado correctament')
+                console.log('Datos ingresado correctamente')
             } catch (e) {
                 Toast.show({
                     type: 'error',
@@ -137,7 +151,7 @@ function FormLogin() {
                     <Text style={styles.dividerText}>OR</Text>
                     <Divider style={styles.divider1} width={2} />
                 </View>
-                <TouchableOpacity activeOpacity={0.8} onPress={handleFacebookLogin}>
+                <TouchableOpacity activeOpacity={0.8} onPress={SingInWithFacebook}>
                     <View style={styles.loginfacecontainer}>
                         <Ionicons name="logo-facebook" size={20} color='#0f5defff'/>
                         <Text style={styles.loginFace}>Log in with Facebook</Text>
