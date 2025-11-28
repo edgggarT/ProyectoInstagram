@@ -6,7 +6,7 @@ import * as wb from 'expo-web-browser'
 import * as Facebook from 'expo-auth-session/providers/facebook'
 import { ResponseType } from "expo-auth-session";
 
-import {signInWithEmailAndPassword, FacebookAuthProvider, signInWithCredential} from 'firebase/auth'
+import {signInWithEmailAndPassword, FacebookAuthProvider, signInWithCredential, onAuthStateChanged} from 'firebase/auth'
 import { useState, useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,6 +25,29 @@ const FACE_APP_ID = "689844140587894"
 function FormLogin() {
     
     const [showPassword, setShowPassword] = useState(true)
+
+
+    useEffect(() => {
+        const persistence = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                Toast.show({
+                    type: "success",
+                    visibilityTime: 3000,
+                    text1: `Iniciando Sesion...`,
+                    position: "top"
+                })
+            } else {
+                Toast.show({
+                    type: "info",
+                    visibilityTime: 3000,
+                    text1: `No hay una cuenta logueada`,
+                    position: "top"
+                })
+            }
+        })
+        return () => persistence()
+    }, [])
+
 
     const [request, response, promptAsync] = Facebook.useAuthRequest({
         responseType: ResponseType.Token,
