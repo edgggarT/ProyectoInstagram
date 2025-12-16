@@ -40,17 +40,17 @@ function FormForgotPassword() {
         <View style={styles.container}>
             <View style={styles.containerText}>
                 <Image source={Padlock} style={styles.padlock}/>
-                <Text style={styles.title}>Trouble Logging in?</Text>
-                <Text style={styles.subtitle}>Enter your email and we'll send you a code to get back into your account</Text>
+                <Text style={styles.title}>Problemas para iniciar sesion?</Text>
+                <Text style={styles.subtitle}>Ingresa tu correo electronico para que podamos mandarte un codigo para que recuperes tu cuenta</Text>
             </View>
             <View style={styles.formBody}>
-                <Input placeholder="Email"
+                <Input placeholder="Correo electronico"
                        onChangeText={formik.handleChange('email')}
                        onBlur={formik.handleBlur('email')} 
                        errorMessage={formik.errors.email}
                        value={formik.values.email}
                        style={styles.input}/>
-                <Button title='Send Login Link'
+                <Button title='Enviar enlace de recuperacion'
                         onPress={formik.handleSubmit}
                         loading={formik.isSubmitting}/>
             </View>

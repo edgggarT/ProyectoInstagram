@@ -1,16 +1,15 @@
-
-import Login from './src/screens/Login';
-import ForgotPassword from './src/screens/ForgotPassword';
-import EnterCode from './src/screens/EnterCode';
-import ResetPassword from './src/screens/ResetPassword';
+import AuthNavigation from './src/navigation/AuthNavigation';
 
 import { View } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { NavigationContainer} from '@react-navigation/native';
 
 export default function App() {
   return (
     <>
-      <Login />
+      <NavigationContainer>
+        <AuthNavigation />
+      </NavigationContainer>
       <Toast />
     </>
   );

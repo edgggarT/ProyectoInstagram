@@ -1,8 +1,8 @@
 import { View, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../util/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { auth } from "../../../firebase";
+import { onAuthStateChanged, reload } from "firebase/auth";
 import Historia from "../home/historias";
 import Home from "../home";
 import Post from "../../components/post";
@@ -11,15 +11,23 @@ const Dashboard = () => {
   const navigation = useNavigation();
   const [displayName, setDisplayName] = useState("Anónimo");
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+  const handleDisplayName = useCallback(() => {
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setDisplayName(user.displayName ?? "Anónimo");
+        await reload(user)
+        setDisplayName(user.displayName ? user.displayName:'Anonimo')
       }
-    });
+    })
+    return () => unsubscribe();
+  }, [])
 
-    return unsubscribe;
+  useEffect(() => {
+      handleDisplayName()
   }, []);
+
+  useFocusEffect(useCallback(()=>{
+    handleDisplayName()
+  }, []))
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
@@ -28,7 +36,7 @@ const Dashboard = () => {
       <Historia
         displayName={displayName}
         onPressChangeName={() =>
-          navigation.navigate("ChangeNameScreen")
+          navigation.navigate("ChangeName")
         }
       />
 

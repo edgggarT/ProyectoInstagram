@@ -21,7 +21,7 @@ const Home = () => {
                 <TouchableOpacity>
                     <Image 
                         style={{ height: 24, width: 30 }} 
-                        source={require('./../../../assets/agregar.jpg')} 
+                        source={require('../../../assets/agregar.jpg')} 
                     />
                 </TouchableOpacity>
 
@@ -33,7 +33,7 @@ const Home = () => {
                 <TouchableOpacity>
                     <Image 
                         style={{ height: 24, width: 30 }} 
-                        source={require('./../../../assets/Corazon (2).jpg')} 
+                        source={require('../../../assets/Corazon (2).jpg')} 
                     />
                 </TouchableOpacity>
             </View>

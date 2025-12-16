@@ -6,15 +6,25 @@ import Search from "../screens/dashboard/Search";
 import Chat from '../screens/dashboard/Chat';
 import Reel from '../screens/dashboard/Reel';
 import UserProfile from '../screens/dashboard/UserProfile';
-import Register from '../screens/Register';
 
 const Tab = createBottomTabNavigator()
 const BottomNavigation = () => {
     return(
         <Tab.Navigator screenOptions={{ headerShown: false, tabBarShowLabel: false }} >
             <Tab.Screen 
-                name="Register" 
-                component={Register} 
+                name="Home" 
+                component={Dashboard} 
+                options={{
+                    tabBarIcon: () => (
+                        <Image 
+                            style={{height: 24, width: 24}}
+                            source={
+                                require('./../../assets/inicio.jpg')
+                            }      
+                        />
+                    )
+                }}
+
             />
             <Tab.Screen name="Reel" component={Reel}
                 options={{

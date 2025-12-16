@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Input, Button, Text, Divider } from "react-native-elements";
 import { useFormik } from "formik";
 import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -25,7 +26,7 @@ const FACE_APP_ID = "689844140587894"
 function FormLogin() {
     
     const [showPassword, setShowPassword] = useState(true)
-
+    const navigation = useNavigation()
 
     useEffect(() => {
         const persistence = onAuthStateChanged(auth, (user) => {
@@ -36,6 +37,7 @@ function FormLogin() {
                     text1: `Iniciando Sesion...`,
                     position: "top"
                 })
+                navigation.replace('Dashboard')
             } else {
                 Toast.show({
                     type: "info",
@@ -144,14 +146,14 @@ function FormLogin() {
         <View style={styles.container}>
             <View style={styles.subcontainer}>
                 <Image source={Logo} style={styles.image}/> 
-                <Input placeholder="Email Address"
+                <Input placeholder="Correo electronico"
                        style={styles.input}
                        onChangeText={formik.handleChange('email')}
                        onBlur={formik.handleBlur('email')}
                        value={formik.values.email}
                        errorMessage={formik.errors.email}
                        />
-                <Input  placeholder="Password"
+                <Input  placeholder="Contraseña"
                         secureTextEntry={showPassword}
                         onChangeText={formik.handleChange('password')}
                         onBlur={formik.handleBlur('password')}
@@ -164,20 +166,22 @@ function FormLogin() {
                     }
                         style={styles.input}
                         />
-                <Text style={styles.forgPass}>Forgotten Password?</Text>
-                <Button  title='Log in'
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                    <Text style={styles.forgPass}>Olvidaste tu contraseña?</Text>
+                </TouchableOpacity>
+                <Button  title='Ingresar'
                          containerStyle={styles.btn}
                          onPress={formik.handleSubmit}
                          loading={formik.isSubmitting}/>
                 <View style={styles.dividers}>
                     <Divider style={styles.divider1} width={2} />
-                    <Text style={styles.dividerText}>OR</Text>
+                        <Text style={styles.dividerText}>O</Text>
                     <Divider style={styles.divider1} width={2} />
                 </View>
                 <TouchableOpacity activeOpacity={0.8} onPress={SingInWithFacebook}>
                     <View style={styles.loginfacecontainer}>
                         <Ionicons name="logo-facebook" size={20} color='#0f5defff'/>
-                        <Text style={styles.loginFace}>Log in with Facebook</Text>
+                        <Text style={styles.loginFace}>Ingresar con facebook</Text>
                     </View>
                 </TouchableOpacity>
                 <View style={styles.dividerSingUp}>
@@ -185,11 +189,11 @@ function FormLogin() {
                 </View>
                 <View style={styles.singUpContainer}>
                     <Text style={styles.dontAcc}>
-                        Dont have an account? 
+                        No tienes una cuenta? 
                     </Text>
                     <TouchableOpacity style={styles.buttonSingUp} activeOpacity={0.8}>
-                        <Text style={styles.signUpLink}>
-                            Sign Up
+                        <Text style={styles.signUpLink} onPress={() => navigation.navigate('Register')}>
+                            Registrate
                         </Text>
                     </TouchableOpacity>
                 </View>

@@ -8,9 +8,16 @@ import { style } from "./index.style";
 import Toast from 'react-native-toast-message';
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { TextLarge, TextMedium, TextSmall } from "../Text";
 
+// IMAGENES
+import condiciones from '../../../assets/img/condiciones.jpg'
+import icono2 from "../../../assets/img/icono4.png"
+import icono3 from "../../../assets/img/icono3.png"
+import icono4 from "../../../assets/img/icono4.png"
+import icono5 from "../../../assets/img/icono5.png"
 
 
 
@@ -23,16 +30,13 @@ export function FormRegister() {
         validationSchema: Validar(),
         validateOnChange: false,
         onSubmit: async (formValue) => {
-            try {
-            const auth = getAuth();
-
-            await createUserWithEmailAndPassword(auth,formValue.email,formValue.password);
-            navigation.reset({
-            index: 0,
-            routes: [{ name: "Onboarding" }],
-            });
-
-
+          try {
+            const userCredential = await createUserWithEmailAndPassword(auth, formValue.email, formValue.password);
+            const user = userCredential.user
+            await updateProfile(user, {
+              displayName: formValue.nombre.trim()
+            })
+            user.displayName = formValue.nombre.trim()
             Toast.show({
                 type: "success",
                 position: "bottom",
@@ -50,7 +54,7 @@ export function FormRegister() {
     });
 
     const opcionesContraseña = () => {
-    setShowPassword(!showPassword)
+      setShowPassword(!showPassword)
     }
     return (
         <View style={style.screen1} >
@@ -102,7 +106,7 @@ export function FormRegister() {
                 />
 
              <Image
-                source={require("../../../../assets/img/condiciones.jpg")}
+                source={condiciones}
                 style={style.Image}
             />
 
@@ -111,7 +115,7 @@ export function FormRegister() {
             
         <View style={style.ventana}>
           <Image
-            source={require("../../../../assets/img/icono4.png")}
+            source={icono4}
             style={style.ico}
           />
           <Text style={style.condiciones}>
@@ -123,7 +127,7 @@ export function FormRegister() {
 
         <View style={style.ventana}>
           <Image
-            source={require("../../../../assets/img/icono2.png")}
+            source={icono2}
             style={style.ico}
           />
           <Text style={style.condiciones}>
@@ -135,7 +139,7 @@ export function FormRegister() {
 
         <View style={style.ventana}>
           <Image
-            source={require("../../../../assets/img/icono5.png")}
+            source={icono5}
             style={style.ico}
           />
           <Text style={style.condiciones}>
@@ -146,7 +150,7 @@ export function FormRegister() {
 
         <View style={style.ventana}>
           <Image
-            source={require("../../../../assets/img/icono3.png")}
+            source={icono3}
             style={style.ico}
           />
           <Text style={style.condiciones}>
@@ -163,8 +167,7 @@ export function FormRegister() {
            
             />
            
-    <TextSmall text="¿ya tengo una cuenta?" onPress={() => navigation.navigate("Login")}
-/>
+    <TextSmall text="¿Ya tienes una cuenta?" onPress={() => navigation.goBack()}/>
     </View>
     )
 }

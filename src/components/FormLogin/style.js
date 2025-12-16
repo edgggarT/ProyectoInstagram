@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container: {
         flex: 1, 
-        backgroundColor: '#1c1b1bff',
+        backgroundColor: '#efe9e9ff',
         padding: 1,
     },
     subcontainer: {
@@ -21,10 +21,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     input: {
-        color: '#fff',
+        color: '#000000ff',
     },
     forgPass: {
-        color: '#0fa0efff',
+        color: '#178ccbff',
         display: "flex",
         textAlign: "right",
         marginBottom: '7%',
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     dividerText: {
-        color: '#fff',
+        color: '#141313ff',
         fontSize: 10,
         marginVertical: 10,
     },
@@ -78,11 +78,11 @@ const styles = StyleSheet.create({
     },
     dontAcc: {
         fontSize: 15,
-        color: 'white',
+        color: 'black',
         alignSelf: 'center'
     },
     signUpLink: {
-        color: '#0fa0efff',
+        color: '#178ccbff',
         fontSize: 15,
     },
     buttonSingUp: {

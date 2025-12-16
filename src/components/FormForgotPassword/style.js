@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1c1b1bff',
+        backgroundColor: '#efe9e9ff',
         display: 'flex',
         justifyContent: 'flex-start',
     },
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         textAlign: 'center',
-        color: 'white'
+        color: 'black'
     },
     subtitle: {
         fontSize: 15,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 25,
     },
     input: {
-        color: '#fff'
+        color: '#000000ff'
     }
 })
 

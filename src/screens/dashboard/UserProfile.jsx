@@ -9,7 +9,7 @@ const posts = [
   { id: "3", image: require('./../../../assets/brazo.png') },
 ];
 
-export default function UserProfile() {
+function UserProfile() {
   return (
     <View style={styles.container}>
       
@@ -268,3 +268,4 @@ const styles = StyleSheet.create({
 
 
 
+export default UserProfile;

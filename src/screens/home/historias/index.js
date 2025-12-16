@@ -47,7 +47,7 @@ const Historia = ({ displayName, onPressChangeName }) => {
             textDecorationLine: "underline",
           }}
         >
-          Cambiar nombre
+          Configurar perfil
         </Text>
       </TouchableOpacity>
 

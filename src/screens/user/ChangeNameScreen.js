@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../util/firebase";
-import { ChangeDisplayNameForm } from "../../components/user/ChangeDisplayNameForm";
+import { auth } from "../../../firebase";
+import ChangeDisplayNameForm from "../../components/user/ChangeDisplayNameForm";
 
-export default function ChangeNameScreen() {
+function ChangeNameScreen() {
   const navigation = useNavigation();
   const user = auth.currentUser;
 
@@ -40,3 +40,6 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 });
+
+
+export default ChangeNameScreen;
