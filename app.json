@@ -1,29 +1,51 @@
 {
   "expo": {
     "name": "ProyectoInstagram",
-    "slug": "ProyectoInstagram",
+    "slug": "intagramapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "owner": "edgar12345s-organization",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.edgar12345.ProyectoInstagram"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": [
+      "insteApp",
+      "fb689844140587894"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8cfc4341-4d8c-45e0-9086-9395dc0b432b"
+      }
     }
   }
 }
